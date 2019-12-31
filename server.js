@@ -54,7 +54,7 @@ app.get('/api/', async (req, res) => {
     responsePlaylist.data.items.forEach(item => {
       item.track.artists.forEach(artist => {
         if (artist) {
-          artistCountMap[artist.name] = artistCountMap[artist.name] ? artistCountMap[artist.name] + 1 : 1
+          artistCountMap[artist.name] = (artistCountMap[artist.name] || 0) + 1
         }
       })
     })
