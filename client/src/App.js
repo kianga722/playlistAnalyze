@@ -1,60 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import PieChart from './components/PieChart';
-import ReactBubbleChart from 'react-d3-bubbles';
+import React from 'react';
 
-import axios from 'axios';
+import LoadingContextProvider from './contexts/LoadingContext';
+import PlaylistContextProvider from './contexts/PlaylistContext';
 
+import Header from './components/Header';
+import InputLink from './components/InputLink';
+import ResultsWrapper from './components/ResultsWrapper';
+
+import { ThemeProvider } from 'styled-components'
+import GlobalStyles from './styles/GlobalStyles';
+import AppStyles from './styles/AppStyles';
+
+const theme = {
+  background: '#F8F8F8',
+  black: '#000',
+  white: '#FFF',
+  green: '#1DB954',
+  lightGreen: '#1ED760',
+  pink: '#FF7180',
+  blue: '#2D46B9',
+  darkBlue: '#1E3264'
+}
 
 function App() {
-  const [playlist, setPlaylist] = useState(null);
-
-  const getPlaylist = async () => {
-    try {
-      console.log('Getting playlist data...')
-      const response = await axios.get('/api');
-      setPlaylist(response.data)
-      
-    } catch (err) {
-      console.log(err.response.data)
-    }
-  };
-
-   // Get playlist data
-   useEffect(() => {
-      getPlaylist();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
-  
   return (
-    <div className="App">
-      {
-        playlist &&
-        <ReactBubbleChart 
-          width={800}
-          height={800}
-          data={Object.values(playlist)}
-          center={{ x: 400, y: 400}}
-          forceStrength={0.03}
-        />
-        // <PieChart 
-        //   width={800}
-        //   height={800}
-        //   innerRadius={0}
-        //   outerRadius={300}
-        //   data={Object.values(playlist)}
-        // />
-      }
-      {
-        playlist &&
-        playlist.map(artistCount => (
-          <div>
-            <span>{artistCount.artist}</span>
-            <span> : </span>
-            <span>{artistCount.value}</span>
-          </div>
-        ))
-      }
-    </div>
+    <ThemeProvider theme={theme}>
+
+      <AppStyles className='App'>
+        <LoadingContextProvider>
+          <PlaylistContextProvider>
+
+            <Header />
+            <InputLink />
+            <ResultsWrapper />
+
+          </PlaylistContextProvider>
+        </LoadingContextProvider>
+      </AppStyles>
+
+      <GlobalStyles />
+
+    </ThemeProvider>
   );
 }
 

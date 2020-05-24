@@ -1,69 +1,113 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
- 
-const Pie = props => {
-  const ref = useRef(null);
 
-  const createPie = d3
-    .pie()
-    .value(d => d.value)
-    .sort(null);
-  
-  const createArc = d3
-    .arc()
-    .innerRadius(props.innerRadius)
-    .outerRadius(props.outerRadius);
-  
-  const colors = d3.scaleOrdinal(d3.schemeCategory10);
-  const format = d3.format(".2f");
+const PieChart = props => {
+  const ref = useRef(null);
 
   useEffect(
     () => {
-      const data = createPie(props.data);
-      const group = d3.select(ref.current);
-      const groupWithData = group.selectAll("g.arc").data(data);
+      // Remove any current svgs before starting
+      d3.select('svg').remove()
+      
+      const data = props.data;
 
-      groupWithData.exit().remove();
+      const width = 450;
+      const height = 450;
+      const radius = Math.min(width, height) / 2;
 
-      const groupWithUpdate = groupWithData
-        .enter()
-        .append("g")
-        .attr("class", "arc");
+      const pieDemo = d3.select(ref.current)
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .style('max-width', width)
+        .style('max-height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .append('g')
+        .attr('transform', `translate(${width/2}, ${height/2})`)
+      
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
+      
+      // Generate pie
+      const pie = d3.pie().value(d => { return d.value })
 
-      const path = groupWithUpdate
-        .append("path")
-        .merge(groupWithData.select("path.arc"));
-
-      path
-        .attr("class", "arc")
-        .attr("d", createArc)
-        .attr("fill", (d, i) => colors(i));
-
-      const text = groupWithUpdate
-        .append("text")
-        .merge(groupWithData.select("text"));
-
-      text
+      // Generate arcs
+      const arc = d3.arc()
+        .innerRadius(80)
+        .outerRadius(radius)
+      
+      // Labels
+      const label = d3.arc()
+      .innerRadius(radius - 100)
+      .outerRadius(radius)
+      
+      // Generate groups
+      const arcs = pieDemo.selectAll('arc')
+        .data(pie(data)).enter()
+        .append('g')
+        .attr('class', 'arc')
+      
+      // Draw arc paths with animation
+      arcs.append('path')
+        .attr('stroke', 'white')
+        .attr('fill', (d, i) => color(i))
+        .transition()
+        .duration(800)
+        .attrTween('d', d => {
+          let i = d3.interpolate(d.startAngle + 0.1, d.endAngle)
+          return t => {
+            d.endAngle = i(t)
+            return arc(d)
+          }
+        })
+      
+      // Arc Labels
+      arcs.append('text')
+        .transition()
+        .duration(800)
+        .attr('transform', d => {
+          return `translate(${label.centroid(d)[0]}, ${label.centroid(d)[1]})`
+        })
+        .text(d => { return `${d.data.artist}` })
+        .attr('font-size', '1.3rem')
+        .attr('font-weight', 'bold')
+        .style('fill', '#183a24')
         .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "middle")
-        .attr("transform", d => `translate(${createArc.centroid(d)})`)
-        .style("fill", "white")
-        .style("font-size", 10)
-        .text(d => {
-          return d.data.artist
-        });
-    },
-    [props.data]
-  );
+        
+
+      arcs.append('text')
+        .transition()
+        .duration(800)
+        .attr('transform', d => {
+          return `translate(${label.centroid(d)[0]}, ${label.centroid(d)[1] + 20})`
+        })
+        .text(d => { return `${d.data.value}` })
+        .attr('font-size', '1.1rem')
+        .style('fill', '#FFF')
+        .attr("text-anchor", "middle")
+      
+      // Tooltip for cutoff labels
+      const toolTip = d3.select(ref.current)
+        .append('div')
+        .attr('class', 'toolTip')
+      
+      d3.selectAll('path').on('mousemove', d => {
+        toolTip.style("left", d3.event.pageX+10+"px");
+        toolTip.style("top", d3.event.pageY-25+"px");
+        toolTip.style("display", "inline-block");
+        toolTip.html((d.data.artist)+"<br>"+(d.data.value));
+      })
+
+      d3.selectAll("path").on("mouseout", d => {
+        toolTip.style("display", "none");
+      });
+
+
+    }
+  )
 
   return (
-    <svg width={props.width} height={props.height}>
-      <g
-        ref={ref}
-        transform={`translate(${props.outerRadius} ${props.outerRadius})`}
-      />
-    </svg>
-  );
-};
+    <div id='pieChart' className='chart' ref={ref}></div>
+  )
+}
 
-export default Pie;
+export default PieChart;
