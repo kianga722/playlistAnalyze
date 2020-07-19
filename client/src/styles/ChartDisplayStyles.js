@@ -57,6 +57,13 @@ const ChartDisplayStyles = styled.article`
       }
     }
   }
+
+  @media (min-width: 375px) {
+    .chart {
+      margin: 0 auto;
+      max-width: 44vw;
+    }
+  }
   
 `;
 
