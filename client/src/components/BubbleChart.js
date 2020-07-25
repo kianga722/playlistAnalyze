@@ -31,7 +31,7 @@ const BubbleChart = props => {
             tspan = text.append("tspan")
                         .attr("x", 0)
                         .attr("y", y)
-                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                        .attr("dy", "1em")
                         .text(word);
           }
         }
