@@ -58,10 +58,21 @@ const ChartDisplayStyles = styled.article`
     }
   }
 
-  @media (min-width: 375px) {
+  @media (min-width: 600px) {
     .chart {
       margin: 0 auto;
-      max-width: 44vw;
+      &#barChart,
+      &#pieChart {
+        max-width: 700px;
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    .chart {
+      .bubbleArtistText {
+        font-size: 20px;
+      }
     }
   }
   

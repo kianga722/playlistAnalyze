@@ -3,7 +3,41 @@ import * as d3 from 'd3';
 
 const BubbleChart = props => {
   const ref = useRef(null);
-  
+
+  // For wrapping long text labels
+  function wrap(text, width) {
+    text.each(function () {
+      var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        x = text.attr("x"),
+        y = text.attr("y"),
+        dy = 0, //parseFloat(text.attr("dy")),
+        tspan = text.text(null)
+                    .append("tspan")
+                    .attr("x", x)
+                    .attr("y", y)
+                    .attr("dy", dy + "em");
+        while (word = words.pop()) {
+          line.push(word);
+          tspan.text(line.join(" "));
+          if (tspan.node().getComputedTextLength() > width) {
+            line.pop();
+            tspan.text(line.join(" "));
+            line = [word];
+            tspan = text.append("tspan")
+                        .attr("x", 0)
+                        .attr("y", y)
+                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                        .text(word);
+          }
+        }
+    });
+  }
+
   useEffect(
     () => {
       // Remove any current svgs before starting
@@ -12,7 +46,7 @@ const BubbleChart = props => {
       const data = props.data;
 
       const width = 650;
-      const height = 600;
+      const height = 550;
 
       const pack = d3.pack()
         .size([width - 2, height - 2])
@@ -56,11 +90,14 @@ const BubbleChart = props => {
         })
         .attr('text-anchor', 'middle')
         .style('fill', '#183a24')
-        .attr('font-size', '1.5rem')
+        .attr('font-size', '20px')
         .attr('font-weight', '700')
+        .attr('transform', `translate(0, 5)`)
         .transition()
         .duration(1500)
         .attr('opacity', 1)
+        .attr('class', 'bubbleArtistText')
+        .call(wrap, 120);
       
       node.append('text')
         .attr('opacity', 0)
@@ -69,12 +106,11 @@ const BubbleChart = props => {
         })
         .attr('text-anchor', 'middle')
         .attr('font-size', '1.1rem')
-        .attr('transform', `translate(0, 25)`)
+        .attr('transform', `translate(0, -15)`)
         .style('fill', '#FFF')
         .transition()
         .duration(1500)
         .attr('opacity', 1)
-
       
     },
     [props.data]

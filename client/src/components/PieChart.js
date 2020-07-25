@@ -11,8 +11,8 @@ const PieChart = props => {
       
       const data = props.data;
 
-      const width = 450;
-      const height = 450;
+      const width = 600;
+      const height = 500;
       const radius = Math.min(width, height) / 2;
 
       const pieDemo = d3.select(ref.current)
@@ -90,17 +90,17 @@ const PieChart = props => {
         .append('div')
         .attr('class', 'toolTip')
       
-      d3.selectAll('path').on('mousemove', d => {
-        toolTip.style("left", d3.event.pageX+10+"px");
-        toolTip.style("top", d3.event.pageY-25+"px");
-        toolTip.style("display", "inline-block");
-        toolTip.html((d.data.artist)+"<br>"+(d.data.value));
-      })
+      // Disable tooltip for now
+      // d3.selectAll('path').on('mousemove', d => {
+      //   toolTip.style("left", d3.event.pageX+10+"px");
+      //   toolTip.style("top", d3.event.pageY-25+"px");
+      //   toolTip.style("display", "inline-block");
+      //   toolTip.html((d.data.artist)+"<br>"+(d.data.value));
+      // })
 
-      d3.selectAll("path").on("mouseout", d => {
-        toolTip.style("display", "none");
-      });
-
+      // d3.selectAll("path").on("mouseout", d => {
+      //   toolTip.style("display", "none");
+      // });
 
     }
   )

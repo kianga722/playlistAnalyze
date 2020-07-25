@@ -8,10 +8,12 @@ const InputLinkStyles = styled.section`
     text-align: center;
   }
   .btnWrapper {
+    margin: 0 auto;
+    max-width: 500px;
     display: flex;
     justify-content: flex-end;
     .clearInput {
-      margin: 1rem 2rem 0 0;
+      margin-top: 1rem;
 
       color: ${props => props.theme.black};
       background-color: transparent;
@@ -33,8 +35,10 @@ const InputLinkStyles = styled.section`
     justify-content: center;
     margin: 1rem 2rem 0;
     textarea {
+      margin: 0 auto;
+      max-width: 500px;
       width: 100%;
-      height: 4rem;
+      height: 169px;
     }
     input[type=submit] {
       margin: 1rem auto;

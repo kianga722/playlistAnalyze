@@ -93,13 +93,15 @@ app.post('/api/', async (req, res) => {
           'Authorization': 'Bearer ' + token
         },
       })
-  
+
       responsePlaylist.data.items.forEach(item => {
-        item.track.artists.forEach(artist => {
-          if (artist) {
-            artistCountMap[artist.name] = (artistCountMap[artist.name] || 0) + 1
-          }
-        })
+        if (item.track && item.track.artists) {
+          item.track.artists.forEach(artist => {
+            if (artist) {
+              artistCountMap[artist.name] = (artistCountMap[artist.name] || 0) + 1
+            }
+          })
+        }
       })
     
       nextUrl = responsePlaylist.data.next

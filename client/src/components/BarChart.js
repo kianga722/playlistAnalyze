@@ -15,7 +15,7 @@ const BarChart = props => {
         top: 15,
         right: 50,
         bottom: 15,
-        left: 180
+        left: 250
       }
       const barThickness = 40;
 
