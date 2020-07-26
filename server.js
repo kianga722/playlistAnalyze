@@ -108,8 +108,18 @@ app.post('/api/', async (req, res) => {
       offset += 100
     }
   } catch (err) {
-    console.log(err.response.data)
-    return res.status(400).send(err.response.data.error.message);
+    let errMsg;
+    if (err.response) {
+      if (err.response.data) {
+        errMsg = err.response.data.error.message;
+      } else {
+        errMsg = err.response.statusText;
+      }
+    } else {
+      errMsg = 'Invalid Input';
+    }
+  
+    return res.status(400).send(errMsg);
   }
   
   // Format playlist object to return
