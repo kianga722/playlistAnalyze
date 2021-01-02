@@ -4,6 +4,8 @@ This project aims to display the distribution of artists in a Spotify playlist
 
 [View App](https://d3analyze.herokuapp.com)
 
+[Serverless](https://github.com/kianga722/playlistAnaylze-serverless) implementation
+
 ![screenshot](https://github.com/kianga722/playlistAnalyze/blob/master/screenshot.png)
 
 ## Summary
