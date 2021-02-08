@@ -13,8 +13,9 @@ const ArtistList = () => {
 
       <ul>
         {
+          playlist &&
           playlist.map(artistCount => (
-            <li>
+            <li key={artistCount.artist}>
               <span className='artist'>{artistCount.artist}</span>
               <span className='colon'> : </span>
               <span className='count'>{artistCount.value}</span>

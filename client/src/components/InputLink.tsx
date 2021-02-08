@@ -8,13 +8,13 @@ const InputLink = () => {
   const { resultsLoading } = useContext(LoadingContext);
   const { getPlaylist } = useContext(PlaylistContext);
 
-  const handleAnalyze = async (event) => {
+  const handleAnalyze = async (event:  React.FormEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (!spotifyLink) {
       alert('Enter a valid Spotify link!')
       return;
     }
-    await getPlaylist(spotifyLink);
+    getPlaylist(spotifyLink);
   }
 
   return (

@@ -8,6 +8,21 @@ const axios = require('axios');
 
 const port = process.env.PORT || 8081;
 
+// types
+import { Request, Response } from 'express';
+
+type artistMap = {
+    [key: string]: number;
+}
+type artistItem = {
+    name: string
+}
+type songItem = {
+    track: {
+        artists: artistItem[]
+    }
+}
+
 // define the Express app
 const app = express();
 // Body Parser
@@ -35,7 +50,7 @@ const authOptions = {
   }
 };
 
-const parseSpotifyURL = link => {
+const parseSpotifyURL = (link: string) => {
   const parsed = url.parse(link);
   const pathname = parsed.pathname;
   const strMatch = '/playlist/';
@@ -48,7 +63,7 @@ const parseSpotifyURL = link => {
 }
 
 // retrieve playlist
-app.post('/api/', async (req, res) => {
+app.post('/api/', async (req: Request, res: Response) => {
   const spotifyLink = req.body.spotifyLink;
   const parsed = parseSpotifyURL(spotifyLink);
   if (!spotifyLink) {
@@ -56,7 +71,7 @@ app.post('/api/', async (req, res) => {
   }
   console.log(parsed)
 
-  const artistCountMap = {}
+  const artistCountMap: artistMap = {}
 
   const responseToken = await axios(authOptions)
   const token = responseToken.data['access_token']
@@ -94,9 +109,9 @@ app.post('/api/', async (req, res) => {
         },
       })
 
-      responsePlaylist.data.items.forEach(item => {
+      responsePlaylist.data.items.forEach((item: songItem) => {
         if (item.track && item.track.artists) {
-          item.track.artists.forEach(artist => {
+          item.track.artists.forEach((artist: artistItem)  => {
             if (artist) {
               artistCountMap[artist.name] = (artistCountMap[artist.name] || 0) + 1
             }
@@ -150,7 +165,7 @@ if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static(path.join(__dirname, 'client/build')));
   // Handle React routing, return all requests to React app
-  app.get('*', (req, res) => {
+  app.get('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 }

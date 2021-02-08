@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=production node server.js",
-    "watch": "NODE_ENV=development nodemon server.js",
+    "start": "NODE_ENV=production node serverapp.js",
+    "watch": "NODE_ENV=development nodemon serverapp.js",
+    "watch-ts": "NODE_ENV=development tsc serverapp.ts -w",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
@@ -17,5 +18,9 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "typescript": "^4.1.3"
   }
 }

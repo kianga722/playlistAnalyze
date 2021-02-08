@@ -7,11 +7,11 @@ import Header from './components/Header';
 import InputLink from './components/InputLink';
 import ResultsWrapper from './components/ResultsWrapper';
 
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider, DefaultTheme } from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
 import AppStyles from './styles/AppStyles';
 
-const theme = {
+const theme: DefaultTheme = {
   background: '#F8F8F8',
   black: '#000',
   white: '#FFF',

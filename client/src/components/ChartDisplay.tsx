@@ -9,7 +9,7 @@ const ChartDisplay = () => {
   const [chart, setChart] = useState('bubble');
   const { playlistName, playlist } = useContext(PlaylistContext);
 
-  const handleChart = type => {
+  const handleChart = (type: string) => {
     setChart(type)
   }
 
@@ -26,6 +26,7 @@ const ChartDisplay = () => {
       </h2>
 
       {
+        playlist &&
         chart === 'bubble' &&
         <BubbleChart
           data={playlist.slice(0, 20)}
@@ -33,6 +34,7 @@ const ChartDisplay = () => {
       }
 
       {
+        playlist &&
         chart === 'bar' &&
         <BarChart
           data={playlist.slice(0,10)}
@@ -40,6 +42,7 @@ const ChartDisplay = () => {
       }
 
       {
+        playlist &&
         chart === 'pie' &&
         <PieChart
           data={playlist.slice(0,5)}
@@ -54,19 +57,19 @@ const ChartDisplay = () => {
         <nav>
           <button
             onClick={(event) => handleChart('bubble')}
-            className={chart === 'bubble' ? 'highlight' : null}
+            className={chart === 'bubble' ? 'highlight' : ''}
           >
             Bubble
           </button>
           <button
             onClick={(event) => handleChart('bar')}
-            className={chart === 'bar' ? 'highlight' : null}
+            className={chart === 'bar' ? 'highlight' : ''}
           >
             Bar
           </button>
           <button
             onClick={(event) => handleChart('pie')}
-            className={chart === 'pie' ? 'highlight' : null}
+            className={chart === 'pie' ? 'highlight' : ''}
           >
             Pie
           </button>
